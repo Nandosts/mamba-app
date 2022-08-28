@@ -1,7 +1,7 @@
 import Home from './routes/Home.html';
-import About from './routes/About.html';
+import ListCharacters from './routes/ListCharacters.html';
 
 export default {
   '/': Home,
-  '/about': About,
+  '/listCharacters': ListCharacters,
 };
