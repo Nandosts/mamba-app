@@ -1,4 +1,4 @@
-<AppBarModifier title="ListCharacters" />
+<AppBarModifier title="List Characters" />
 
 <p>
   Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sapiente aut
@@ -9,13 +9,19 @@
   <a href="/">Voltar</a>
 </p>
 
+<Popup ref:popup fullscreen>
+  <LoadingSprite />
+  <h1>Carregando lista de personagens...</h1>
+</Popup>
+
 <script>
   import Http from '@mamba/pos/api/http.js';
   import Storage from '@mamba/pos/api/storage.js';
 
   let fullList = Storage.getItem('starWarsCharacters') || [];
 
-  function requestFromApi(url = 'https://swapi.dev/api/people/') {
+  function requestFromApi(url = 'https://swapi.dev/api/people/', _popup) {
+    if (_popup) _popup.open();
     const myRequest = {
       url,
       method: 'GET',
@@ -30,28 +36,34 @@
         fullList = fullList.concat(char.results);
 
         if (char.next) {
-          requestFromApi(char.next);
+          requestFromApi(char.next, _popup);
         } else {
           Storage.setItem('starWarsCharacters', fullList);
+          if (_popup) _popup.close();
         }
       })
       .catch(error => {
         // if the request fails
         console.error(error.status);
         console.error(error.msg);
+        if (_popup) _popup.close();
       });
   }
-
-  if (fullList.length === 0) {
-    requestFromApi();
-  }
-
   export default {
     components: {
       AppBarModifier: '@mamba/appbar/Modifier.html',
+      Popup: '@mamba/dialog',
+      LoadingSprite: '@mamba/sprite/Loading.html',
     },
     data() {
       return {};
+    },
+    async oncreate() {
+      if (fullList.length === 0) {
+        const url = 'https://swapi.dev/api/people/';
+        this.refs.popup.open();
+        await requestFromApi(url, this.refs.popup);
+      }
     },
     methods: {},
   };
