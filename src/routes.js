@@ -1,7 +1,9 @@
 import Home from './routes/Home.html';
-import ListCharacters from './routes/ListCharacters.html';
+import Blank from './routes/Blank.html';
 
-export default {
+const routes = {
   '/': Home,
-  '/listCharacters': ListCharacters,
+  '/blank': Blank,
 };
+
+export default routes;
