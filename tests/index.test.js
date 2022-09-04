@@ -8,7 +8,9 @@ it('should be at home', () => {
   expect(document.title).toBe('Home');
 });
 
-it('should go to Blank page', () => {
-  Router.go('/Blank');
-  expect(document.title).toBe('Blank');
+it('should go to PersonDetails page', () => {
+  Router.go('/PersonDetails');
+  expect(document.title).toBe('PersonDetails');
+});
+
 });
