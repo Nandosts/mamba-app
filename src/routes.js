@@ -1,7 +1,12 @@
 import Home from './routes/Home.html';
-import About from './routes/About.html';
+import PreviousConsults from './routes/PreviousConsults.html';
+import PersonDetails from './routes/PersonDetails.html';
 
-export default {
+const routes = {
   '/': Home,
-  '/about': About,
+  '/PreviousConsults': PreviousConsults,
+  '/PersonDetails/': PersonDetails,
+  '/PersonDetails/:id': PersonDetails,
 };
+
+export default routes;

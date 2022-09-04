@@ -1,23 +1,97 @@
 <App>
-  <AppBar title="Template"/>
+  <AppBar title="mamba-app" />
   <Router {routes} />
 </App>
 
+<Popup ref:popup fullscreen>
+  <LoadingSprite />
+  <h1>
+    Carregando dados do aplicativo, aguarde um instante
+  </h1>
+</Popup>
+
+<Dialog title="Atenção" textColor="#f00" ref:errorDialog fullscreen>
+  Houve um erro no processamento dos seus dados, tente novamente mais tarde ou
+  contate um administrador.
+</Dialog>
+
 <script>
+  import Http from '@mamba/pos/api/http.js';
+  import Storage from '@mamba/pos/api/storage.js';
+
+  import Router from 'svelte-page';
   import routes from './routes.js';
   import store from './store.js';
+
+  let fullList = Storage.getItem('starWarsCharacters') || [];
+  let requestRunning = false;
+
+  function requestFromApi(url = 'https://swapi.dev/api/people/', _refs) {
+    requestRunning = true;
+    const myRequest = {
+      url,
+      method: 'GET',
+      data: {},
+      proxy: true,
+    };
+
+    Http.send(myRequest)
+      .then(result => {
+        // in case the request have no errors
+        const char = JSON.parse(result.body);
+        fullList = fullList.concat(char.results);
+
+        if (char.next) {
+          requestFromApi(char.next, _refs);
+        } else {
+          Storage.setItem('starWarsCharacters', fullList);
+          if (_refs) _refs.popup.close();
+          requestRunning = false;
+        }
+      })
+      .catch(error => {
+        // if the request fails
+        console.error(error.status);
+        console.error(error.msg);
+        if (_refs && _refs.open) _refs.popup.close();
+        _refs.errorDialog.open(5000);
+        requestRunning = false;
+      });
+  }
 
   export default {
     components: {
       App: '@mamba/app',
-      Router: 'svelte-page/Router.html',
       AppBar: '@mamba/appbar',
+      Dialog: '@mamba/dialog',
+      LoadingSprite: '@mamba/sprite/Loading.html',
+      Popup: '@mamba/dialog',
+      Router: 'svelte-page/Router.html',
     },
     store: () => store,
     data() {
       return {
         routes,
       };
+    },
+
+    async oncreate() {
+      if (fullList.length === 0) {
+        const url = 'https://swapi.dev/api/people/';
+        await requestFromApi(url, this.refs);
+      }
+
+      this.root.on('router:change', () => {
+        if (fullList.length === 0) {
+          const url = 'https://swapi.dev/api/people/';
+          requestFromApi(url, this.refs);
+          this.refs.popup.open();
+        }
+        if (requestRunning === true) {
+          this.refs.popup.open();
+          Router.go('/');
+        }
+      });
     },
   };
 </script>

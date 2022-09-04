@@ -55,11 +55,13 @@
   },
 
   /** Auto-fix on save */
-  "eslint.autoFixOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
   /** Validate html/svelte files */
   "eslint.validate": [
-    { "language": "javascript", "autoFix": true },
-    { "language": "html", "autoFix": true },
-    { "language": "svelte", "autoFix": true }
+    "javascript",
+    "html",
+    "svelte"
   ],
 }
