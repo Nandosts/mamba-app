@@ -1,27 +1,29 @@
 <AppBarModifier title="Home" />
 
-<p>
-  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+<section class="home-section">
+  <p>
+    Esse é um aplicativo para verificar quem pode ser um personagem de star
+    wars! No primeiro botão abaixo você seleciona uma pessoa aleatória, onde
+    dentro dele há mais opções; No segundo botão, você pode verificar quais
+    pessoas você já verificou antigamente.
+  </p>
   <br />
-  <a href="/Blank">Blank</a>
   <br />
-  <a href="/PersonDetails">PersonDetails</a>
-</p>
+</section>
 
-<Printable ref:printable>
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga unde dicta at
-  quisquam doloremque sunt soluta architecto debitis, sit quidem placeat qui nam
-  expedita quod, mollitia suscipit porro saepe recusandae.
-</Printable>
+<div class="buttons">
+  <a href="/PersonDetails">
+  <Button size="small">
+      Verificar alguém
+    </Button>
+  </a>
 
-<Button size="full" bottom on:click="refs.dialog.open(2000)" shortcut="enter">
-  Imprimir! (press. enter)
-</Button>
-
-<Dialog ref:dialog fullscreen>
-  <LoadingSprite />
-  <h1>Carregando...</h1>
-</Dialog>
+  <a href="/Blank">
+    <Button size="small">
+      Consultas anteriores
+    </Button>
+  </a>
+</div>
 
 <script>
   export default {
@@ -36,8 +38,17 @@
 </script>
 
 <style type="text/postcss">
+  .home-section {
+    padding: 1.25rem;
+  }
+
   p {
-    padding: 20px;
-    font-size: 22px;
+    font-size: 1.2rem;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
   }
 </style>
