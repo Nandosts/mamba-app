@@ -13,4 +13,7 @@ it('should go to PersonDetails page', () => {
   expect(document.title).toBe('PersonDetails');
 });
 
+it('should go to PreviousConsults page', () => {
+  Router.go('/PreviousConsults');
+  expect(document.title).toBe('PreviousConsults');
 });

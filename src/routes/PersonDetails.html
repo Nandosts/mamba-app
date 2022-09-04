@@ -47,11 +47,11 @@
   import Http from '@mamba/pos/api/http.js';
   import { Store } from 'svelte/store.js';
 
-  let characters = Storage.getItem('starWarsCharacters');
+  let characters = Storage.getItem('starWarsCharacters') || [];
   let characterSelected = Math.floor(Math.random() * characters.length);
   Storage.setItem('starWarsCharacters', characters);
 
-  let character = characters[characterSelected];
+  let character = characters[characterSelected] || {};
   const store = new Store({
     character,
   });
@@ -124,8 +124,10 @@
     },
     async oncreate() {
       characters = Storage.getItem('starWarsCharacters');
-      characterSelected = Math.floor(Math.random() * characters.length);
+      characterSelected =
+        this.get().params.id || Math.floor(Math.random() * characters.length);
       characters[characterSelected].selected = true;
+      characters[characterSelected].identifier = characterSelected;
       Storage.setItem('starWarsCharacters', characters);
 
       character = characters[characterSelected];

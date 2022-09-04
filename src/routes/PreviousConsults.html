@@ -1,0 +1,59 @@
+<AppBarModifier title="Características" />
+
+<ul class="characters-data">
+  Personagens vistos: {#each selectedCharacters as film}
+  <li class="film-item">
+    <a href="/PersonDetails/{film.identifier}">
+      {film.name}
+    </a>
+  </li>
+  {/each}
+</ul>
+<a href="/">Voltar</a>
+
+<script>
+  import Storage from '@mamba/pos/api/storage.js';
+
+  const characters = Storage.getItem('starWarsCharacters') || [];
+  const selectedCharacters = characters.filter(
+    character => character.selected === true,
+  );
+
+  export default {
+    components: {
+      AppBarModifier: '@mamba/appbar/Modifier.html',
+    },
+    data() {
+      return {
+        selectedCharacters,
+      };
+    },
+  };
+</script>
+
+<style type="text/postcss">
+  .characters-data {
+    padding: 1.25rem;
+    font-size: 1rem;
+  }
+
+  .eyes-color {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .eyes-color-block {
+    content: '.';
+    border-radius: 50%;
+    box-shadow: 0 0 1px black;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 2rem;
+  }
+
+  .film-item {
+    list-style: disc inside;
+  }
+</style>
