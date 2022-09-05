@@ -1,61 +1,63 @@
 <AppBarModifier title="Características" />
 
-{#if $character} {#if !$openedFlyer}
-<ul class="character-data">
-  <li>
-    Nome: {$character.name}
-  </li>
-  <li>
-    Altura: {$character.height}
-  </li>
-  <li>
-    Massa: {$character.mass}
-  </li>
-  <li>
-    Cor do Cabelo: {$character.hair_color}
-  </li>
-  <li>
-    Cor de pele: {$character.skin_color}
-  </li>
-  <li class="eyes-color">
-    Cor dos olhos: {$character.eye_color}
-    <div
-      class="eyes-color-block"
-      style="background: {$character.eye_color};"
-    ></div>
-  </li>
-  <li>
-    Ano de nascimento: {$character.birth_year}
-  </li>
-  <li>
-    Gênero: {$character.gender}
-  </li>
-  <li>
-    Mundo de origem: {$character.homeworld || ""}
-  </li>
-  {#if $character.films}
-  <ul>
-    Filmes: {#each $character.films as film}
-    <li class="film-item">
-      {film}
+<div class="align-center">
+  {#if $character} {#if !$openedFlyer}
+  <ul class="character-data">
+    <li>
+      Nome: {$character.name}
     </li>
-    {/each}
+    <li>
+      Altura: {$character.height}
+    </li>
+    <li>
+      Massa: {$character.mass}
+    </li>
+    <li>
+      Cor do Cabelo: {$character.hair_color}
+    </li>
+    <li>
+      Cor de pele: {$character.skin_color}
+    </li>
+    <li class="eyes-color">
+      Cor dos olhos: {$character.eye_color}
+      <div
+        class="eyes-color-block"
+        style="background: {$character.eye_color};"
+      ></div>
+    </li>
+    <li>
+      Ano de nascimento: {$character.birth_year}
+    </li>
+    <li>
+      Gênero: {$character.gender}
+    </li>
+    <li>
+      Mundo de origem: {$character.homeworld || ""}
+    </li>
+    {#if $character.films}
+    <ul>
+      Filmes: {#each $character.films as film}
+      <li class="film-item">
+        {film}
+      </li>
+      {/each}
+    </ul>
+    {/if}
   </ul>
-  {/if}
-</ul>
-<a href="/">Voltar</a>
-{:else}
-<Flyer data="{$character}" opened="{$openedFlyer}"></Flyer>
-{/if} {/if}
+  <a href="/">Voltar</a>
+  {:else}
+  <Flyer data="{$character}" opened="{$openedFlyer}"></Flyer>
+  {/if} {/if}
 
-<div class="buttons">
-  <Button size="small" on:click="setFlyer()" shortcut="1">
-    Abrir/Fechar filipeta (1)
-  </Button>
+  <div class="buttons">
+    <Button size="fill" on:click="setFlyer()" shortcut="1">
+      Abrir/Fechar filipeta (1)
+    </Button>
 
-  <Button size="small" on:click="refs.printable.print()" shortcut="enter">
-    Imprimir filipeta (Enter)
-  </Button>
+    <Button size="fill" on:click="refs.printable.print()" shortcut="enter">
+      Imprimir filipeta (Enter)
+    </Button>
+  </div>
 </div>
 
 <Printable ref:printable>
@@ -197,9 +199,8 @@
 
 <style type="text/postcss">
   .align-center {
-    width: 100%;
     display: grid;
-    justify-items: center;
+    grid-template-rows: auto auto 1fr;
   }
 
   .character-data {
@@ -228,8 +229,10 @@
   }
 
   .buttons {
+    position: relative;
     display: flex;
+    column-gap: 2%;
     justify-content: space-between;
-    margin-top: auto;
+    margin-top: 1.5rem;
   }
 </style>
