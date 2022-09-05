@@ -55,6 +55,7 @@
     methods: {
       clearStorage() {
         Storage.clear();
+        // Preferi garantir o fechamento do app para carregar novamente os dados
         App.close();
       },
     },

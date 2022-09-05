@@ -17,6 +17,9 @@
 
 <script>
   import Http from '@mamba/pos/api/http.js';
+  // Decidi que iria utilizar o store para minimizar o número de requisições.
+  // Soa melhor para mim fazer apenas uma requisição grande e depois procurar
+  // sempre que possível puxar os dados já existentes.
   import Storage from '@mamba/pos/api/storage.js';
 
   import routes from './routes.js';
@@ -75,6 +78,7 @@
     },
 
     async oncreate() {
+      fullList = Storage.getItem('starWarsCharacters') || [];
       if (fullList.length === 0 && !requestRunning) {
         this.refs.popup.open();
         const url = 'https://swapi.dev/api/people/';
@@ -85,7 +89,7 @@
         if (fullList.length === 0 && !requestRunning) {
           this.refs.popup.open();
           const url = 'https://swapi.dev/api/people/';
-          requestFromApi(url, this.refs)
+          requestFromApi(url, this.refs);
         }
       });
     },

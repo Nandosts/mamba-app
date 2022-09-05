@@ -109,6 +109,8 @@
   }
 
   function setFilmsName() {
+    // Tornar a função assíncrona aqui permite que todos os filmes sejam
+    // buscados e atualizados em sequência
     filmUrls.forEach(async filmUrl => {
       const myRequest = {
         url: filmUrl,
@@ -116,6 +118,7 @@
         data: {},
         proxy: true,
       };
+      // Não achei necessidade de colocar um loading para não atrasar o uso do app
       await Http.send(myRequest)
         .then(result => {
           // in case the request have no errors
@@ -152,6 +155,9 @@
       };
     },
     async oncreate() {
+      // Assim parece retrabalho, mas em todas as páginas pedi que fossem
+      // preenchidas novamente as variáveis para evitar problemas com dados
+      // desatualizados ou situações similares.
       characters = Storage.getItem('starWarsCharacters') || [];
       characterSelected =
         this.get().params.id || (characters && characters.length)
