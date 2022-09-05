@@ -85,7 +85,7 @@
         if (fullList.length === 0 && !requestRunning) {
           this.refs.popup.open();
           const url = 'https://swapi.dev/api/people/';
-          requestFromApi(url, this.refs);
+          requestFromApi(url, this.refs)
         }
       });
     },
