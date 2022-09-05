@@ -1,0 +1,113 @@
+<!-- eslint-disable prefer-destructuring -->
+<div class="align-center" class:hidden="opened === false">
+  <div class="flyer">
+    <ul class="character-data">
+      <li>
+        <p>Nome:</p>
+        <p>{data.name}</p>
+      </li>
+      <li>
+        <p>Altura:</p>
+        <p>{data.height}</p>
+      </li>
+      <li>
+        <p>Massa:</p>
+        <p>{data.mass}</p>
+      </li>
+      <li>
+        <p>Cor do Cabelo:</p>
+        <p>{data.hair_color}</p>
+      </li>
+      <li>
+        <p>Cor de pele:</p>
+        <p>{data.skin_color}</p>
+      </li>
+      <li>
+        <p>Cor dos olhos:</p>
+        <p>{data.eye_color}</p>
+      </li>
+      <li>
+        <p>Ano de nascimento:</p>
+        <p>{data.birth_year}</p>
+      </li>
+      <li>
+        <p>Gênero:</p>
+        <p>{data.gender}</p>
+      </li>
+      <li>
+        <p>Mundo de origem:</p>
+        <p>{data.homeworld}</p>
+      </li>
+      <ul>
+        Filmes: {#each data.films || [] as film}
+        <li class="film-item">
+          {film}
+        </li>
+        {/each}
+      </ul>
+    </ul>
+  </div>
+</div>
+
+<script>
+  let data = {};
+  let opened = false;
+
+  export default {
+    components: {},
+    data() {
+      return {
+        data,
+        opened,
+      };
+    },
+    oncreate() {
+      // eslint-disable-next-line prefer-destructuring
+      data = this.get().data;
+      // eslint-disable-next-line prefer-destructuring
+      opened = this.get().opened;
+    },
+    methods: {},
+  };
+</script>
+
+<style type="text/postcss">
+  .align-center {
+    width: 100%;
+    display: grid;
+    justify-items: center;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .flyer {
+    width: 80%;
+
+    background-color: rgba(0, 0, 0, 0.938);
+    color: white;
+    display: flex;
+
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .character-data {
+    width: 80%;
+    height: 80%;
+    padding: 1rem 0rem;
+    font-size: 1rem;
+  }
+
+  .character-data li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 2rem;
+  }
+
+  .film-item {
+    list-style: disc inside;
+  }
+</style>

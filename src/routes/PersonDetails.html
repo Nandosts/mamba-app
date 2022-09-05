@@ -1,5 +1,6 @@
 <AppBarModifier title="Características" />
 
+{#if !$openedFlyer}
 <ul class="character-data">
   <li>
     Nome: {$character.name}
@@ -41,19 +42,38 @@
   </ul>
 </ul>
 <a href="/">Voltar</a>
+{:else}
+<Flyer data="{$character}" opened="{$openedFlyer}"></Flyer>
+{/if}
 
+<div class="buttons">
+  <Button size="small" on:click="setFlyer()" shortcut="1">
+    Abrir/Fechar filipeta (1)
+  </Button>
+
+  <Button size="small" on:click="refs.printable.print()" shortcut="enter">
+    Imprimir filipeta (Enter)
+  </Button>
+</div>
+
+<Printable ref:printable>
+  <Flyer data="{$character}" opened="{true}"></Flyer>
+</Printable>
 <script>
   import Storage from '@mamba/pos/api/storage.js';
   import Http from '@mamba/pos/api/http.js';
   import { Store } from 'svelte/store.js';
+  import Flyer from '../components/Flyer.html';
 
   let characters = Storage.getItem('starWarsCharacters') || [];
   let characterSelected = Math.floor(Math.random() * characters.length);
   Storage.setItem('starWarsCharacters', characters);
+  let openedFlyer = false;
 
   let character = characters[characterSelected] || {};
   const store = new Store({
     character,
+    openedFlyer,
   });
   let filmUrls = character.films;
   let films = [];
@@ -115,6 +135,9 @@
   export default {
     components: {
       AppBarModifier: '@mamba/appbar/Modifier.html',
+      Button: '@mamba/button',
+      Printable: '@mamba/printable',
+      Flyer,
     },
     store: () => store,
     data() {
@@ -144,11 +167,24 @@
       setWorldName();
       await setFilmsName();
     },
-    methods: {},
+    methods: {
+      setFlyer() {
+        openedFlyer = !openedFlyer;
+        store.set({
+          openedFlyer,
+        });
+      },
+    },
   };
 </script>
 
 <style type="text/postcss">
+  .align-center {
+    width: 100%;
+    display: grid;
+    justify-items: center;
+  }
+
   .character-data {
     padding: 1.25rem;
     font-size: 1rem;
@@ -172,5 +208,11 @@
 
   .film-item {
     list-style: disc inside;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
   }
 </style>
