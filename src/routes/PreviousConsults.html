@@ -1,7 +1,7 @@
 <AppBarModifier title="Consultas anteriores" />
 
 <ul class="characters-data">
-  Personagens vistos: {#each selectedCharacters as person}
+  Personagens vistos: {#each $selectedCharacters as person}
   <li class="person-item">
     <a href="/PersonDetails/{person.identifier}">
       {person.name}
@@ -11,22 +11,53 @@
 </ul>
 <a href="/">Voltar</a>
 
+<Button size="full" bottom on:click="clearStorage()" shortcut="enter">
+  Limpar dados do aplicativo (Enter)
+</Button>
+
 <script>
   import Storage from '@mamba/pos/api/storage.js';
+  import App from '@mamba/pos/api/app.js';
+  import { Store } from 'svelte/store.js';
 
-  const characters = Storage.getItem('starWarsCharacters') || [];
-  const selectedCharacters = characters.filter(
-    character => character.selected === true,
-  );
+  let characters = Storage.getItem('starWarsCharacters') || [];
+  let selectedCharacters = [];
+
+  const store = new Store({
+    selectedCharacters,
+  });
+
+  function setCharacters() {
+    characters = Storage.getItem('starWarsCharacters') || [];
+    selectedCharacters = characters.filter(
+      character => character.selected === true,
+    );
+
+    store.set({
+      selectedCharacters,
+    });
+  }
 
   export default {
     components: {
+      Button: '@mamba/button',
       AppBarModifier: '@mamba/appbar/Modifier.html',
     },
+    store: () => store,
     data() {
       return {
         selectedCharacters,
       };
+    },
+    oncreate() {
+      setCharacters();
+    },
+    methods: {
+      clearStorage() {
+        Storage.clear();
+        // Preferi garantir o fechamento do app para carregar novamente os dados
+        App.close();
+      },
     },
   };
 </script>

@@ -1,4 +1,6 @@
-<!-- eslint-disable prefer-destructuring -->
+<!-- Filipeta se tornou um componente presente na página, assim será sempre
+  renderizada apenas a Filipeta ou apenas outros dados -->
+
 <div class="align-center" class:hidden="opened === false">
   <div class="flyer">
     <ul class="character-data">
@@ -79,16 +81,14 @@
   }
 
   .hidden {
-    display: none !important;
+    display: none;
   }
 
   .flyer {
     width: 80%;
-
     background-color: rgba(0, 0, 0, 0.938);
     color: white;
     display: flex;
-
     flex-direction: column;
     align-items: center;
   }
