@@ -19,7 +19,6 @@
   import Http from '@mamba/pos/api/http.js';
   import Storage from '@mamba/pos/api/storage.js';
 
-  import Router from 'svelte-page';
   import routes from './routes.js';
   import store from './store.js';
 
@@ -76,20 +75,17 @@
     },
 
     async oncreate() {
-      if (fullList.length === 0) {
+      if (fullList.length === 0 && !requestRunning) {
+        this.refs.popup.open();
         const url = 'https://swapi.dev/api/people/';
         await requestFromApi(url, this.refs);
       }
 
       this.root.on('router:change', () => {
-        if (fullList.length === 0) {
+        if (fullList.length === 0 && !requestRunning) {
+          this.refs.popup.open();
           const url = 'https://swapi.dev/api/people/';
           requestFromApi(url, this.refs);
-          this.refs.popup.open();
-        }
-        if (requestRunning === true) {
-          this.refs.popup.open();
-          Router.go('/');
         }
       });
     },

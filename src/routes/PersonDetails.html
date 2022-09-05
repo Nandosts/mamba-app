@@ -1,6 +1,6 @@
 <AppBarModifier title="Características" />
 
-{#if !$openedFlyer}
+{#if $character} {#if !$openedFlyer}
 <ul class="character-data">
   <li>
     Nome: {$character.name}
@@ -33,6 +33,7 @@
   <li>
     Mundo de origem: {$character.homeworld || ""}
   </li>
+  {#if $character.films}
   <ul>
     Filmes: {#each $character.films as film}
     <li class="film-item">
@@ -40,11 +41,12 @@
     </li>
     {/each}
   </ul>
+  {/if}
 </ul>
 <a href="/">Voltar</a>
 {:else}
 <Flyer data="{$character}" opened="{$openedFlyer}"></Flyer>
-{/if}
+{/if} {/if}
 
 <div class="buttons">
   <Button size="small" on:click="setFlyer()" shortcut="1">
@@ -59,6 +61,7 @@
 <Printable ref:printable>
   <Flyer data="{$character}" opened="{true}"></Flyer>
 </Printable>
+
 <script>
   import Storage from '@mamba/pos/api/storage.js';
   import Http from '@mamba/pos/api/http.js';
@@ -66,7 +69,10 @@
   import Flyer from '../components/Flyer.html';
 
   let characters = Storage.getItem('starWarsCharacters') || [];
-  let characterSelected = Math.floor(Math.random() * characters.length);
+  let characterSelected =
+    characters && characters.length
+      ? Math.floor(Math.random() * characters.length)
+      : 0;
   Storage.setItem('starWarsCharacters', characters);
   let openedFlyer = false;
 
@@ -75,7 +81,7 @@
     character,
     openedFlyer,
   });
-  let filmUrls = character.films;
+  let filmUrls = character ? character.films : [];
   let films = [];
   let homeworld = '';
 
@@ -146,9 +152,11 @@
       };
     },
     async oncreate() {
-      characters = Storage.getItem('starWarsCharacters');
+      characters = Storage.getItem('starWarsCharacters') || [];
       characterSelected =
-        this.get().params.id || Math.floor(Math.random() * characters.length);
+        this.get().params.id || (characters && characters.length)
+          ? Math.floor(Math.random() * characters.length)
+          : 0;
       characters[characterSelected].selected = true;
       characters[characterSelected].identifier = characterSelected;
       Storage.setItem('starWarsCharacters', characters);
