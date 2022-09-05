@@ -159,10 +159,13 @@
       // preenchidas novamente as variáveis para evitar problemas com dados
       // desatualizados ou situações similares.
       characters = Storage.getItem('starWarsCharacters') || [];
+      const { id } = this.get().params;
       characterSelected =
-        this.get().params.id || (characters && characters.length)
+        id ||
+        (characters && characters.length
           ? Math.floor(Math.random() * characters.length)
-          : 0;
+          : 0);
+
       characters[characterSelected].selected = true;
       characters[characterSelected].identifier = characterSelected;
       Storage.setItem('starWarsCharacters', characters);
