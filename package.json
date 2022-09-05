@@ -1,6 +1,6 @@
 {
   "name": "mamba-app",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Repositório com mamba, para listagem e exibição de personagens star-wars",
   "mamba": {
     "id": 13554,
